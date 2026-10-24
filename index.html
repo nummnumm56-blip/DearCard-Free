@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>DearYou Free | Lovely Light</title>
+  <meta name="description" content="DearYou Free — buat kartu ucapan digital interaktif. Dukung pengembangan DearYou secara sukarela.">
+
+  <!-- Google Fonts Complete -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- External JS Libraries -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Custom Visual Themes & High-End Animations -->
+  <style>
+    [x-cloak] { display: none !important; }
+
+    /* Keyframe Animations */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .animate-shake { animation: shake 0.4s ease-in-out; }
+
+    @keyframes candleFlame {
+      0%, 100% { transform: scale(1) rotate(-1deg); filter: drop-shadow(0 0 6px #f59e0b); }
+      50% { transform: scale(1.18) rotate(3deg); filter: drop-shadow(0 0 14px #ef4444); }
+    }
+    .animate-flame { animation: candleFlame 1.2s infinite ease-in-out; transform-origin: bottom center; }
+
+    @keyframes floatGlass {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+    .animate-float-glass { animation: floatGlass 4.5s ease-in-out infinite; }
+
+    @keyframes paperWiggle {
+      0%, 100% { transform: rotate(-1deg); }
+      50% { transform: rotate(1deg); }
+    }
+    .animate-paper-wiggle { animation: paperWiggle 6s ease-in-out infinite; }
+
+    @keyframes crtScanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+    .bg-crt-overlay {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(34, 211, 238, 0.4), inset 0 0 15px rgba(34, 211, 238, 0.2); }
+      50% { box-shadow: 0 0 25px rgba(244, 63, 94, 0.7), inset 0 0 25px rgba(244, 63, 94, 0.3); }
+    }
+    .animate-neon-pulse { animation: neonPulse 3s infinite ease-in-out; }
+
+    @keyframes shimmerMove {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+    .animate-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .animate-shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      animation: shimmerMove 3s infinite;
+    }
+
+    /* Patterns & Accents */
+    .bg-moodboard-pattern {
+      background-color: #e5dec9;
+      background-image: radial-gradient(#b8ad94 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+    }
+
+    .bg-doodle-grid {
+      background-size: 24px 24px;
+      background-image: linear-gradient(to right, rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+      background-color: #faf8f2;
+    }
+
+    .washi-tape-pink {
+      background: rgba(244, 114, 182, 0.45);
+      border-left: 3px dashed rgba(255, 255, 255, 0.8);
+      border-right: 3px dashed rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    }
+
+    .washi-tape-amber {
+      background: rgba(217, 119, 6, 0.35);
+      border-left: 3px dashed rgba(255, 255, 255, 0.8);
+      border-right: 3px dashed rgba(255, 255, 255, 0.8);
+    }
+
+    .ticket-stub {
+      background-image: radial-gradient(circle at 0 50%, transparent 8px, #fff 9px), 
+                        radial-gradient(circle at 100% 50%, transparent 8px, #fff 9px);
+    }
+
+    .blob-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    :root { color-scheme: light; }
+    body { 
+      background-color: #fbf8ff;
+      background-image: radial-gradient(ellipse at 8% 0%, rgba(244,114,182,.18), transparent 38%), 
+                        radial-gradient(ellipse at 100% 8%, rgba(167,139,250,.18), transparent 36%),
+                        linear-gradient(180deg, #fffaff 0%, #f4f2fb 100%);
+      color: #29233b;
+    }
+
+    input, textarea, select { transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 3px rgba(244,114,182,.18); }
+    button, .dy-upload-btn { transition: transform .18s ease, filter .18s ease, background .18s ease; }
+    button:active, .dy-upload-btn:active { transform: scale(.98); }
+
+    .dy-upload-card { display:flex; align-items:center; gap:12px; padding:12px; border:1px solid rgba(244,114,182,.3); border-radius:16px; background:linear-gradient(135deg,#fff4fa,#f3f0ff); }
+    .dy-upload-icon { display:grid; place-items:center; width:42px;height:42px; flex-shrink:0; border-radius:13px; background:rgba(244,114,182,.15); color:#db2777; font-size:20px; }
+    .dy-upload-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; padding:9px 14px; border-radius:11px; border:1px solid #fbcfe8; background:#fce7f3; color:#be185d; font-size:11px; font-weight:800; }
+    .dy-upload-btn:hover { background:#fbcfe8; }
+    .dy-mini-btn { padding:7px 10px; border:1px solid #e2e8f0; border-radius:9px; color:#475569; font-size:11px; font-weight:700; background:#f8fafc; }
+    .dy-mini-btn.dy-danger { color:#e11d48; background:#fff1f2; border-color:#fecdd3; }
+    .dy-photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; }
+    .dy-photo-item { overflow:hidden; border:1px solid #e2e8f0; border-radius:14px; background:#fff; min-width:0; }
+    .dy-photo-item img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; background:#f1f5f9; }
+    .dy-photo-meta { display:flex; justify-content:space-between; align-items:center; gap:6px; padding:6px 8px; color:#64748b; font-size:10px; }
+    .dy-photo-meta button { width:22px;height:22px; border-radius:6px; color:#e11d48; background:#ffe4e6; font-size:16px; line-height:1; }
+    .dy-empty-media { padding:20px 12px; border:1px dashed rgba(244,114,182,.4); border-radius:14px; text-align:center; color:#8d789e; font-size:12px; background:#fff; }
+    
+    @media (max-width:640px) { 
+      .dy-photo-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; } 
+      .dy-upload-card { gap:8px; padding:10px; } 
+      .dy-upload-btn { padding:8px 10px; } 
+    }
+    /* FREE edition: calm Lovely Light styling with minimal motion. */
+    body { background: #fff8fb !important; color: #29233b; }
+    .blob-glow { display: none !important; }
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+
+  <!-- Application Engine -->
+  <script>
+    function dearyouApp() {
+      return {
+        viewMode: 'dashboard',
+        dashboardTab: 'my',
+        showGuide: false,
+        isRecipientView: false,
+        isAudioPlaying: false,
+        copiedToast: false,
+        toastMessage: '',
+        timerInterval: null,
+        isCardOpened: false,
+        scratchRevealed: false,
+
+        counter: {
+          years: 0, months: 0, days: 0,
+          hours: 0, minutes: 0, seconds: 0,
+          totalDays: 0
+        },
+
+        activeProject: {
+          id: 'proj-1',
+          slug: 'love-1001',
+          type: 'anniversary',
+          theme: 'lovely',
+          title: 'Satu Tahun Bersamamu',
+          startDate: new Date().toISOString().slice(0, 16),
+          audioUrl: '',
+          message: 'Terima kasih sudah menjadi alasan tersenyum setiap hari.',
+          scratchMessage: 'Kamu berhak dapat pelukan hangat kapan saja!'
+        },
+
+        initScratchCard: function() {
+          this.scratchRevealed = false;
+          this.$nextTick(() => {
+            const canvas = document.getElementById('scratchCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.globalCompositeOperation = 'source-over';
+
+            ctx.fillStyle = '#f472b6';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('GOSOK LAYAR DI SINI ✨', canvas.width / 2, canvas.height / 2 + 4);
+
+            let isDrawing = false;
+            let self = this;
+
+            const checkProgress = () => {
+              if (self.scratchRevealed) return;
+              const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              let transparent = 0;
+              for (let i = 3; i < imgData.data.length; i += 4) {
+                if (imgData.data[i] === 0) transparent++;
+              }
+              if (transparent / (imgData.data.length / 4) > 0.4) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                self.scratchRevealed = true;
+                self.showToast('Hadiah Rahasia Terbuka!');
+              }
+            };
+
+            const scratch = (e) => {
+              if (!isDrawing || self.scratchRevealed) return;
+              const rect = canvas.getBoundingClientRect();
+              const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+              const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+              
+              const scaleX = canvas.width / rect.width;
+              const scaleY = canvas.height / rect.height;
+              const x = (clientX - rect.left) * scaleX;
+              const y = (clientY - rect.top) * scaleY;
+              
+              ctx.globalCompositeOperation = 'destination-out';
+              ctx.beginPath();
+              ctx.arc(x, y, 22, 0, Math.PI * 2);
+              ctx.fill();
+              checkProgress();
+            };
+
+            canvas.onmousedown = () => isDrawing = true;
+            canvas.onmouseup = () => isDrawing = false;
+            canvas.onmouseleave = () => isDrawing = false;
+            canvas.onmousemove = scratch;
+            canvas.ontouchstart = (e) => { isDrawing = true; scratch(e); };
+            canvas.ontouchend = () => isDrawing = false;
+            canvas.ontouchmove = scratch;
+          });
+        },
+
+        exportToImage: function() {
+          const cardEl = document.getElementById('exportableCard');
+          if (!cardEl) return;
+          this.showToast('Sedang menyiapkan gambar...');
+          
+          html2canvas(cardEl, { 
+            scale: 2, 
+            useCORS: true,
+            ignoreElements: (el) => el.classList.contains('no-export')
+          }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = (this.activeProject.title || 'kartu-ucapan') + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            this.showToast('Gambar kartu berhasil diunduh!');
+          }).catch(() => {
+            this.showToast('Gagal mengunduh gambar.');
+          });
+        },
+
+        projects: [],
+
+        normalizeFreeProject: function(project) {
+          var p = JSON.parse(JSON.stringify(project || {}));
+          p.theme = 'lovely';
+          delete p.pin;
+          delete p.quizQuestion;
+          delete p.quizAnswer;
+          delete p.photos;
+          delete p.nextEventTitle;
+          delete p.nextEventDate;
+          delete p.vouchers;
+          delete p.bucketList;
+          delete p.particleEffect;
+          return p;
+        },
+
+        get displayedProjects() {
+          return this.projects;
+        },
+
+
+        initApp: function() {
+          var saved = localStorage.getItem('dearyou_projects_db');
+          if (saved) {
+            try { this.projects = JSON.parse(saved); } catch(e) { this.projects = []; }
+          }
+          if (Array.isArray(this.projects)) this.projects = this.projects.map(p => this.normalizeFreeProject(p));
+          if (!this.projects || this.projects.length === 0) {
+            this.projects = [ this.normalizeFreeProject(this.activeProject) ];
+            this.saveToStorage();
+          }
+
+          var urlParams = new URLSearchParams(window.location.search);
+          var dataParam = urlParams.get('data');
+          var slugParam = urlParams.get('slug');
+
+          if (dataParam) {
+            try {
+              var decodedJson = decodeURIComponent(atob(dataParam));
+              var parsedCard = JSON.parse(decodedJson);
+              this.activeProject = this.normalizeFreeProject(parsedCard);
+              this.viewMode = 'public';
+              this.isRecipientView = true;
+              this.isCardOpened = false;
+              this.startLiveCounter();
+                  return;
+            } catch(e) {
+              console.error("Gagal membaca data dari link", e);
+            }
+          }
+
+          if (slugParam) {
+            var found = null;
+            var allProjects = this.projects;
+            for (var i = 0; i < allProjects.length; i++) {
+              if (allProjects[i].slug === slugParam) {
+                found = allProjects[i];
+                break;
+              }
+            }
+            if (found) {
+              this.activeProject = this.normalizeFreeProject(found);
+            }
+            this.viewMode = 'public';
+            this.isRecipientView = true;
+            this.isCardOpened = false;
+            this.startLiveCounter();
+            }
+        },
+
+        openCardInteractive: function() {
+          this.isCardOpened = true;
+          this.initScratchCard();
+          
+          var audioEl = document.getElementById('bgAudio');
+          if (audioEl && this.activeProject.audioUrl) {
+            var self = this;
+            audioEl.play().then(function() {
+              self.isAudioPlaying = true;
+            }).catch(function() {});
+          }
+        },
+
+        saveToStorage: function() {
+          localStorage.setItem('dearyou_projects_db', JSON.stringify(this.projects));
+        },
+
+        showToast: function(msg) {
+          this.toastMessage = msg;
+          this.copiedToast = true;
+          var self = this;
+          setTimeout(function() { self.copiedToast = false; }, 3200);
+        },
+
+        createNewProject: function(type) {
+          this.activeProject = {
+            id: 'proj-' + Date.now(),
+            slug: 'love-' + Math.floor(1000 + Math.random() * 9000),
+            type: type || 'anniversary',
+            theme: 'lovely',
+            title: '',
+            startDate: new Date().toISOString().slice(0, 16),
+            audioUrl: '',
+              message: '',
+                    scratchMessage: 'Kamu berhak dapat pelukan hangat dan es krim!',
+            };
+          this.activeProject.theme = 'lovely';
+          this.viewMode = 'editor';
+        },
+
+        editProject: function(proj) {
+          this.activeProject = this.normalizeFreeProject(proj);
+          this.viewMode = 'editor';
+        },
+
+        saveProject: function() {
+          this.activeProject = this.normalizeFreeProject(this.activeProject);
+          if (!this.activeProject.title || !this.activeProject.message) {
+            this.showToast('Mohon isi judul ucapan dan pesan!');
+            return;
+          }
+
+          var idx = -1;
+          for (var i = 0; i < this.projects.length; i++) {
+            if (this.projects[i].id === this.activeProject.id) {
+              idx = i;
+              break;
+            }
+          }
+
+          if (idx !== -1) {
+            this.projects[idx] = JSON.parse(JSON.stringify(this.activeProject));
+          } else {
+            this.projects.unshift(JSON.parse(JSON.stringify(this.activeProject)));
+          }
+
+          this.saveToStorage();
+          this.showToast('Kartu ucapan berhasil disimpan.');
+          this.dashboardTab = 'my';
+          this.viewMode = 'dashboard';
+        },
+
+        deleteProject: function(id) {
+          if (confirm('Apakah Anda yakin ingin menghapus kartu ucapan ini?')) {
+            var filtered = [];
+            for (var i = 0; i < this.projects.length; i++) {
+              if (this.projects[i].id !== id) filtered.push(this.projects[i]);
+            }
+            this.projects = filtered;
+            this.saveToStorage();
+            this.showToast('Kartu berhasil dihapus.');
+          }
+        },
+
+        openPreview: function(proj) {
+          this.activeProject = this.normalizeFreeProject(proj);
+          this.viewMode = 'public';
+          this.isRecipientView = false;
+          this.isCardOpened = false;
+          this.startLiveCounter();
+        },
+
+        toggleAudio: function() {
+          var audioEl = document.getElementById('bgAudio');
+          if (!audioEl || !this.activeProject.audioUrl) {
+            this.showToast('Belum ada tautan musik yang diisi.');
+            return;
+          }
+
+          if (this.isAudioPlaying) {
+            audioEl.pause();
+            this.isAudioPlaying = false;
+          } else {
+            var self = this;
+            audioEl.play().then(function() {
+              self.isAudioPlaying = true;
+            }).catch(function() {
+              self.showToast('Sentuh layar sekali lagi untuk memutar musik.');
+            });
+          }
+        },
+
+        startLiveCounter: function() {
+          if (this.timerInterval) clearInterval(this.timerInterval);
+          var self = this;
+          this.updateCounter();
+          this.timerInterval = setInterval(function() {
+            self.updateCounter();
+          }, 1000);
+        },
+
+        updateCounter: function() {
+          if (!this.activeProject.startDate) return;
+          var start = new Date(this.activeProject.startDate);
+          var now = new Date();
+
+          if (isNaN(start.getTime())) return;
+
+          var diffMs = now - start;
+          if (diffMs < 0) diffMs = 0;
+
+          var totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+          var years = now.getFullYear() - start.getFullYear();
+          var months = now.getMonth() - start.getMonth();
+          var days = now.getDate() - start.getDate();
+
+          if (days < 0) { months--; days += 30; }
+          if (months < 0) { years--; months += 12; }
+
+          var hours = now.getHours() - start.getHours();
+          var minutes = now.getMinutes() - start.getMinutes();
+          var seconds = now.getSeconds() - start.getSeconds();
+
+          if (seconds < 0) { seconds += 60; minutes--; }
+          if (minutes < 0) { minutes += 60; hours--; }
+          if (hours < 0) { hours += 24; }
+
+          this.counter = {
+            years: Math.max(0, years),
+            months: Math.max(0, months),
+            days: Math.max(0, days),
+            hours: Math.max(0, hours),
+            minutes: Math.max(0, minutes),
+            seconds: Math.max(0, seconds),
+            totalDays: totalDays
+          };
+        },
+
+        getBadgeText: function(type) {
+          if (type === 'birthday') return 'Happy Birthday';
+          if (type === 'valentine') return 'Happy Valentine';
+          return 'Happy Anniversary';
+        }
+      };
+    }
+  </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans relative selection:bg-rose-200 selection:text-rose-900 overflow-x-hidden">
+
+  <!-- APP ROOT -->
+  <div x-data="dearyouApp()" x-init="initApp()" class="flex-1 flex flex-col min-h-screen relative z-10" x-cloak>
+
+    <!-- HEADER NAVIGATION -->
+    <header x-show="viewMode !== 'public'" class="bg-white/80 backdrop-blur-md border-b border-rose-100/80 sticky top-0 z-40 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 cursor-pointer shrink-0" @click="viewMode = 'dashboard'">
+          <span class="text-xl font-bold font-serif text-slate-800 tracking-tight">DearYou</span>
+          <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/80">FREE</span>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button x-show="viewMode === 'dashboard'" @click="createNewProject('anniversary')" class="bg-rose-500 hover:bg-rose-600 text-white px-3.5 sm:px-5 py-2 rounded-xl text-xs font-semibold shadow-md shadow-rose-200/60 transition-all active:scale-95 flex items-center gap-1.5 shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Buat Kartu Baru</span>
+          </button>
+
+          <button @click="showGuide = true" class="w-8 h-8 sm:w-9 sm:h-9 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/80 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all active:scale-95 shrink-0" title="Panduan Penggunaan">
+            ?
+          </button>
+
+          <button x-show="viewMode === 'editor'" @click="viewMode = 'dashboard'" class="text-slate-500 hover:text-slate-800 text-xs font-semibold transition-colors flex items-center gap-1 shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span class="hidden sm:inline">Kembali</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MODAL PANDUAN PENGGUNAAN -->
+    <div x-show="showGuide" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" x-cloak>
+      <div @click.away="showGuide = false" class="bg-white rounded-3xl border border-rose-100 max-w-lg w-full p-6 sm:p-8 shadow-2xl relative space-y-5 animate-fade-in text-slate-800 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-rose-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center font-bold text-sm">?</span>
+            <h3 class="font-serif font-bold text-lg text-slate-800">Panduan Pembuatan Kartu</h3>
+          </div>
+          <button @click="showGuide = false" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1">✕</button>
+        </div>
+
+        <div class="space-y-4 text-xs leading-relaxed text-slate-600">
+          <div class="flex gap-3 items-start">
+            <span class="w-6 h-6 bg-rose-500 text-white font-bold rounded-lg flex items-center justify-center shrink-0 text-[11px]">1</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Pilih Momen & Tema Visual</h4>
+              <p class="mt-0.5">Tentukan jenis ucapan (Anniversary, Ulang Tahun, atau Valentine). Versi FREE menggunakan satu tampilan sederhana: Lovely Light.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start">
+            <span class="w-6 h-6 bg-rose-500 text-white font-bold rounded-lg flex items-center justify-center shrink-0 text-[11px]">2</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Musik Latar (Opsional)</h4>
+              <p class="mt-0.5">Tambahkan lagu MP3/M4A dari perangkat jika ingin memberi suasana pada kartu.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start">
+            <span class="w-6 h-6 bg-rose-500 text-white font-bold rounded-lg flex items-center justify-center shrink-0 text-[11px]">3</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Aktifkan Fitur Interaktif</h4>
+              <p class="mt-0.5">Tulis pesan utama dan pesan rahasia pada kartu gosok jika ingin memberi kejutan kecil.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-start">
+            <span class="w-6 h-6 bg-rose-500 text-white font-bold rounded-lg flex items-center justify-center shrink-0 text-[11px]">4</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Simpan & Bagikan Link</h4>
+              <p class="mt-0.5">Klik "Simpan Kartu", lalu salin link tautan khusus untuk dikirim ke pasangan/teman, atau unduh tampilan kartu sebagai gambar PNG.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-rose-100 flex justify-end">
+          <button @click="showGuide = false" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all active:scale-95 shadow-md shadow-rose-200">
+            Saya Mengerti
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div x-show="copiedToast" x-transition.opacity class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 border border-slate-800 backdrop-blur-md">
+      <svg class="w-4 h-4 text-rose-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      <span class="text-xs font-medium" x-text="toastMessage"></span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 w-full mx-auto" :class="viewMode === 'public' ? 'p-0' : 'p-4 md:p-6 max-w-6xl'">
+
+      <!-- ================= 1. DASHBOARD VIEW ================= -->
+      <div x-show="viewMode === 'dashboard'" class="space-y-6 animate-fade-in max-w-4xl mx-auto">
+
+        <!-- Hero Card -->
+        <div class="bg-gradient-to-r from-rose-100/90 via-pink-100/70 to-purple-100/90 border border-rose-200/80 rounded-3xl p-6 md:p-10 text-slate-800 shadow-xl shadow-rose-100/50 relative overflow-hidden">
+          <div class="relative z-10 max-w-lg space-y-3">
+            <span class="inline-block bg-rose-200/60 text-rose-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-rose-300/50">
+              DEARYOU FREE
+            </span>
+            <h2 class="text-2xl md:text-3xl font-serif font-bold text-slate-900 leading-tight">Buat Kartu Ucapan Digital yang Manis</h2>
+            <p class="text-slate-600 text-xs md:text-sm leading-relaxed">Tulis pesan spesial, hitung durasi hubungan, tambahkan musik opsional, lalu bagikan tautannya.</p>
+
+            <div class="pt-2 flex flex-wrap gap-2.5">
+              <button @click="createNewProject('anniversary')" class="bg-white text-slate-800 border border-rose-200 font-bold px-4 py-2 rounded-xl text-xs hover:bg-rose-50 transition-all active:scale-95 shadow-sm">
+                Anniversary
+              </button>
+              <button @click="createNewProject('birthday')" class="bg-white/80 hover:bg-white text-slate-800 border border-rose-200 font-bold px-4 py-2 rounded-xl text-xs transition-all active:scale-95 shadow-sm">
+                Ulang Tahun
+              </button>
+              <button @click="createNewProject('valentine')" class="bg-white/80 hover:bg-white text-slate-800 border border-rose-200 font-bold px-4 py-2 rounded-xl text-xs transition-all active:scale-95 shadow-sm">
+                Valentine
+              </button>
+            </div>
+            <a href="https://lynk.id/saseason01/wem3wk12e1p8/checkout" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all active:scale-95">
+              <span aria-hidden="true">♡</span> Dukung DearYou (Support) <span aria-hidden="true">↗</span>
+            </a>
+            <p class="text-[11px] text-slate-500 mt-1">Gratis digunakan. Dukungan kamu membantu pengembangan DearYou.</p>
+          </div>
+        </div>
+
+        <!-- Header + Tab Switcher -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div class="flex items-center gap-3">
+            <h3 class="font-serif font-bold text-lg text-slate-800">Koleksi Kartu Ucapan</h3>
+            <span class="text-xs text-slate-500 font-medium" x-text="displayedProjects.length + ' Kartu Tersimpan'"></span>
+          </div>
+        </div>
+
+        <!-- Grid Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <template x-for="p in displayedProjects" :key="p.id">
+            <div class="bg-white rounded-2xl p-5 border border-rose-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[10px] font-bold tracking-wider text-rose-600 uppercase bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200/60" x-text="getBadgeText(p.type)"></span>
+                  <span class="text-[10px] font-semibold text-slate-500 capitalize" x-text="'Tema: Lovely Light'"></span>
+                </div>
+
+                <h4 class="font-serif font-bold text-slate-800 text-lg mt-3" x-text="p.title || 'Tanpa Judul'"></h4>
+                <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed" x-text="p.message"></p>
+              </div>
+
+              <div class="pt-3 border-t border-rose-100 flex items-center gap-2">
+                <button @click="copyShareLink(p)" class="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold py-2.5 rounded-xl transition-all active:scale-95">
+                  Salin Link
+                </button>
+                <button @click="openPreview(p)" class="bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all active:scale-95 shadow-sm shadow-rose-200">
+                  Buka Kartu
+                </button>
+                <button x-show="dashboardTab === 'my'" @click="editProject(p)" class="p-2 text-slate-400 hover:text-slate-700 text-xs" title="Edit">Edit</button>
+                <button x-show="dashboardTab === 'my'" @click="deleteProject(p.id)" class="p-2 text-slate-400 hover:text-rose-500 text-xs" title="Hapus">Hapus</button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- ================= 2. EDITOR VIEW ================= -->
+      <div x-show="viewMode === 'editor'" class="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-8 border border-rose-100 shadow-xl space-y-6 animate-fade-in text-slate-800">
+        <div class="border-b border-rose-100 pb-3">
+          <h2 class="text-xl font-serif font-bold text-slate-800">Edit Kartu Ucapan</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Pilih momen, tulis pesan, lalu simpan atau bagikan kartu.</p>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700">1. Pilihan Momen Spesial</label>
+          <select x-model="activeProject.type" class="w-full bg-slate-50 border border-rose-200 text-slate-800 rounded-xl p-3 text-xs mt-1 focus:outline-none focus:bg-white focus:border-rose-400 font-medium">
+            <option value="anniversary">Happy Anniversary / Jadian</option>
+            <option value="birthday">Happy Birthday / Ulang Tahun</option>
+            <option value="valentine">Happy Valentine / Hari Kasih Sayang</option>
+          </select>
+        </div>
+
+        <div class="rounded-2xl border border-rose-100 bg-rose-50/50 p-4">
+          <label class="text-xs font-bold text-slate-700">2. Tampilan</label>
+          <div class="mt-2 rounded-xl border border-rose-200 bg-white p-4">
+            <span class="block text-[9px] font-bold uppercase tracking-widest text-rose-500">FREE THEME</span>
+            <span class="mt-1 block font-serif text-base font-bold text-slate-800">Lovely Light</span>
+            <span class="mt-1 block text-[11px] leading-relaxed text-slate-500">Tampilan romantis bernuansa lembut, sederhana, dan minim animasi.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700">Judul Ucapan</label>
+          <input type="text" x-model="activeProject.title" placeholder="Contoh: Happy 1st Anniversary My Love" class="w-full bg-slate-50 border border-rose-200 text-slate-800 rounded-xl p-3 text-xs mt-1 focus:outline-none focus:bg-white focus:border-rose-400 font-medium" />
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700">Tanggal Momen / Tanggal Jadian</label>
+          <input type="datetime-local" x-model="activeProject.startDate" class="w-full bg-slate-50 border border-rose-200 text-slate-800 rounded-xl p-3 text-xs mt-1 focus:outline-none focus:bg-white focus:border-rose-400 font-medium" />
+        </div>
+
+        <!-- MUSIK LATAR (OPSIONAL) -->
+        <div class="rounded-2xl border border-rose-100 bg-rose-50/30 p-4 space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-rose-600">Musik Latar (Opsional)</h3>
+          <div class="dy-upload-card">
+            <div class="dy-upload-icon">♫</div>
+            <div class="min-w-0 flex-1"><p class="text-sm font-bold text-slate-800" x-text="activeProject.audioFileName || (activeProject.audioUrl ? 'Musik tersedia' : 'Belum ada musik')"></p><p class="mt-0.5 text-[11px] text-slate-500">MP3, WAV, OGG, M4A • maks. 15 MB</p></div>
+            <label class="dy-upload-btn">Pilih audio<input type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a" class="sr-only" @change="handleAudioFile($event)"></label>
+          </div>
+          <div class="mt-2 flex gap-2" x-show="activeProject.audioUrl">
+            <button type="button" @click="previewLocalAudio()" class="dy-mini-btn">▶ Pratinjau</button>
+            <button type="button" @click="removeLocalAudio()" class="dy-mini-btn dy-danger">Hapus musik</button>
+          </div>
+        </div>
+
+        <!-- PESAN & GOSOK HADIAH -->
+        <div>
+          <label class="text-xs font-bold text-slate-700">Pesan Romantis / Surat Cinta</label>
+          <textarea x-model="activeProject.message" rows="4" placeholder="Tuliskan pesan indah di sini..." class="w-full bg-slate-50 border border-rose-200 text-slate-800 rounded-xl p-3 text-xs mt-1 focus:outline-none focus:bg-white focus:border-rose-400 leading-relaxed font-medium"></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700">Pesan Rahasia Scratch Card (Kartu Gosok)</label>
+          <input type="text" x-model="activeProject.scratchMessage" placeholder="Misal: Kamu berhak dapat pelukan hangat dan es krim!" class="w-full bg-slate-50 border border-rose-200 text-slate-800 rounded-xl p-3 text-xs mt-1 focus:outline-none focus:bg-white focus:border-rose-400 font-medium" />
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button @click="saveProject()" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 rounded-xl text-xs transition-all active:scale-95 shadow-lg shadow-rose-200/80">
+            Simpan Kartu Ucapan
+          </button>
+          <button @click="openPreview(activeProject)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-3.5 rounded-xl text-xs transition-all active:scale-95">
+            Preview
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 3. PUBLIC VIEW & DISPLAY SCREEN ================= -->
+      <div x-show="viewMode === 'public'"
+           class="min-h-screen w-full flex flex-col items-center justify-start p-4 md:p-8 bg-[#fff8fb] text-slate-800 overflow-x-hidden">
+        
+        <audio id="bgAudio" :src="activeProject.audioUrl" loop></audio>
+
+        <!-- FLOATING CONTROLS (AUDIO & DASHBOARD) -->
+        <div x-show="!isRecipientView" class="fixed top-4 left-4 z-40 no-export">
+          <button @click="viewMode = 'dashboard'" class="bg-white/90 backdrop-blur-md text-slate-800 px-4 py-2 rounded-full text-xs font-bold shadow-md border border-rose-200 hover:bg-rose-50 transition-all flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Dashboard
+          </button>
+        </div>
+
+        <div class="fixed top-4 right-4 z-40 flex flex-wrap justify-end gap-2 no-export">
+          <button @click="toggleAudio()" class="bg-white/90 backdrop-blur-md text-slate-800 px-4 py-2 rounded-full text-xs font-bold shadow-md border border-rose-200 hover:bg-rose-50 transition-all flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full" :class="isAudioPlaying ? 'bg-rose-500 animate-ping' : 'bg-slate-400'"></span>
+            <span x-text="isAudioPlaying ? 'Musik Aktif' : 'Musik Mati'"></span>
+          </button>
+        </div>
+
+        <!-- UNOPENED CARD COVER SCREEN -->
+        <div x-show="!isCardOpened" class="w-full max-w-md my-auto relative z-20 pt-8">
+          
+          <div class="rounded-3xl border border-rose-200 bg-white p-8 text-center text-slate-800 shadow-lg">
+
+            <!-- MOMENT 1: ANNIVERSARY -->
+            <template x-if="activeProject.type === 'anniversary'">
+              <div class="space-y-6 flex flex-col items-center">
+                <div class="relative w-24 h-24 flex items-center justify-center">
+                  <svg class="w-20 h-20 text-rose-500 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+
+                <div class="space-y-2">
+                  <span class="text-xs uppercase block font-serif font-bold tracking-widest text-rose-500">Special Anniversary Gift</span>
+                  
+                  <h3 class="font-serif text-2xl font-bold text-slate-800">Ada Pesan Spesial Untukmu</h3>
+                  
+                  <p class="text-xs opacity-75">Klik tombol di bawah untuk membuka kartu.</p>
+                </div>
+
+                <button @click="openCardInteractive()" class="w-full rounded-xl bg-rose-500 py-3.5 text-xs font-bold text-white">
+                  Buka Kartu Ucapan
+                </button>
+              </div>
+            </template>
+
+            <!-- MOMENT 2: BIRTHDAY -->
+            <template x-if="activeProject.type === 'birthday'">
+              <div class="space-y-6 flex flex-col items-center">
+                <div class="relative w-24 h-24 flex items-center justify-center">
+                  <div class="w-4 h-6 bg-amber-400 rounded-full absolute -top-2 z-20"></div>
+                  <svg class="w-20 h-20 text-rose-500 drop-shadow-md z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 6a1 1 0 0 1 1 1v1h-2V7a1 1 0 0 1 1-1zm9 7v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zm-2 2H5v5h14v-5z"/>
+                  </svg>
+                </div>
+
+                <div class="space-y-2">
+                  <span class="text-xs uppercase block font-serif font-bold tracking-widest text-rose-500">Happy Birthday Surprise</span>
+                  
+                  <h3 class="font-serif text-2xl font-bold text-slate-800">Selamat Ulang Tahun!</h3>
+                  
+                  <p class="text-xs opacity-75">Tiup lilinnya & buka kartu di dalamnya.</p>
+                </div>
+
+                <button @click="openCardInteractive()" class="w-full rounded-xl bg-rose-500 py-3.5 text-xs font-bold text-white">
+                  Tiup Lilin & Buka Kartu
+                </button>
+              </div>
+            </template>
+
+            <!-- MOMENT 3: VALENTINE -->
+            <template x-if="activeProject.type === 'valentine'">
+              <div class="space-y-6 flex flex-col items-center">
+                <div class="relative w-24 h-24 flex items-center justify-center">
+                  <svg class="w-20 h-20 text-rose-500 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </div>
+
+                <div class="space-y-2">
+                  <span class="text-xs uppercase block font-serif font-bold tracking-widest text-rose-500">Happy Valentine's Day</span>
+                  
+                  <h3 class="font-serif text-2xl font-bold text-slate-800">Surat Cinta Spesial</h3>
+                  
+                  <p class="text-xs opacity-75">Klik untuk membuka kartu ucapan Valentine.</p>
+                </div>
+
+                <button @click="openCardInteractive()" class="w-full rounded-xl bg-rose-500 py-3.5 text-xs font-bold text-white">
+                  Buka Kartu Valentine
+                </button>
+              </div>
+            </template>
+
+          </div>
+        </div>
+
+        <!-- OPENED CARD DISPLAY -->
+        <div x-show="isCardOpened" id="exportableCard" class="relative z-20 mx-auto my-auto w-full max-w-3xl py-8">
+          
+          <!-- LAYOUT TEMA 1: LOVELY LIGHT -->
+          <template x-if="true">
+            <div class="bg-white/90 backdrop-blur-2xl border border-rose-200/80 shadow-2xl shadow-rose-100/60 rounded-[2.5rem] p-6 md:p-10 text-slate-800 space-y-8">
+              
+              <div class="text-center space-y-2">
+                <span class="inline-block bg-rose-100 text-rose-600 text-[10px] font-bold px-3.5 py-1 rounded-full uppercase tracking-widest border border-rose-200/60" x-text="getBadgeText(activeProject.type)"></span>
+                <h1 class="font-serif text-3xl md:text-5xl font-bold text-slate-800 tracking-tight" x-text="activeProject.title"></h1>
+              </div>
+
+              <!-- Desktop Grid Layout -->
+              <div class="grid grid-cols-1 gap-6">
+                
+                <!-- Left Column (5 Cols) -->
+                <div class="space-y-5">
+                  <!-- Live Counter -->
+                  <div class="bg-rose-50/60 border border-rose-200/60 rounded-2xl p-5 shadow-inner text-center">
+                    <p class="text-rose-600 text-[10px] font-bold uppercase tracking-widest mb-3">Telah Bersama Selama</p>
+                    <div class="grid grid-cols-3 gap-3">
+                      <div class="bg-white rounded-xl p-3 border border-rose-100 shadow-sm">
+                        <span class="text-rose-500 font-serif text-3xl font-bold block" x-text="counter.years"></span>
+                        <span class="text-[9px] text-slate-500 uppercase font-semibold">Tahun</span>
+                      </div>
+                      <div class="bg-white rounded-xl p-3 border border-rose-100 shadow-sm">
+                        <span class="text-rose-500 font-serif text-3xl font-bold block" x-text="counter.months"></span>
+                        <span class="text-[9px] text-slate-500 uppercase font-semibold">Bulan</span>
+                      </div>
+                      <div class="bg-white rounded-xl p-3 border border-rose-100 shadow-sm">
+                        <span class="text-rose-500 font-serif text-3xl font-bold block" x-text="counter.days"></span>
+                        <span class="text-[9px] text-slate-500 uppercase font-semibold">Hari</span>
+                      </div>
+                    </div>
+                    <div class="mt-3 text-[11px] text-slate-600 font-mono flex justify-center gap-2">
+                      <span x-text="counter.hours + ' jam'"></span> •
+                      <span x-text="counter.minutes + ' menit'"></span> •
+                      <span x-text="counter.seconds + ' detik'"></span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Right Column (7 Cols) -->
+                <div class="space-y-5">
+                  <!-- Romantic Message -->
+                  <div class="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-rose-200/60 shadow-sm text-left">
+                    <p class="font-serif text-base md:text-lg leading-relaxed text-slate-800 whitespace-pre-line" x-text="activeProject.message"></p>
+                  </div>
+
+                  <!-- Scratch Card -->
+                  <div x-show="activeProject.scratchMessage" class="bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200/80 rounded-2xl p-5 text-center space-y-3 shadow-sm">
+                    <span class="text-xs font-bold text-rose-600 uppercase tracking-widest block">Gosok Hadiah Rahasia</span>
+                    <div class="relative w-full max-w-[280px] h-20 mx-auto rounded-xl overflow-hidden border border-rose-200 bg-white flex items-center justify-center p-3 text-center shadow-inner">
+                      <p class="text-xs font-bold text-rose-600 leading-tight" x-text="activeProject.scratchMessage"></p>
+                      <canvas id="scratchCanvas" width="280" height="80" class="absolute inset-0 cursor-pointer touch-none z-10 transition-opacity duration-300"></canvas>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Export Image Button -->
+              <div class="pt-4 border-t border-rose-100 no-export">
+                <button @click="exportToImage()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 rounded-2xl text-xs shadow-md shadow-rose-200 flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4 text-rose-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>Simpan Kartu Ucapan (.PNG)</span>
+                </button>
+              </div>
+
+            </div>
+          </template>
+
+
+        </div>
+
+      </div>
+    </main>
+
+    <footer x-show="viewMode !== 'public'" class="w-full px-4 pb-6 pt-2 text-center relative z-10">
+      <p class="text-xs text-slate-500">DearYou Free · dibuat dengan ♡ untuk momen spesial</p>
+      <a href="https://lynk.id/saseason01/wem3wk12e1p8/checkout" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-rose-600 hover:text-rose-700 underline underline-offset-4">
+        Support Sea Store <span aria-hidden="true">↗</span>
+      </a>
+    </footer>
+  </div>
+
+<script>
+/* DearYou Free local media + IndexedDB upgrade & TinyURL Shortener */
+(function () {
+  const DB_NAME = 'DearYouLocalVault';
+  const DB_VERSION = 1;
+  let dbPromise;
+  function openVault() {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise((resolve, reject) => {
+      if (!('indexedDB' in window)) return reject(new Error('Browser tidak mendukung IndexedDB'));
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains('items')) db.createObjectStore('items');
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Database gagal dibuka'));
+    });
+    return dbPromise;
+  }
+  async function vaultSet(key, value) {
+    const db = await openVault();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('items', 'readwrite');
+      tx.objectStore('items').put(value, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error || new Error('Gagal menyimpan file lokal'));
+    });
+  }
+  async function vaultGet(key) {
+    const db = await openVault();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('items', 'readonly');
+      const req = tx.objectStore('items').get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error || new Error('Gagal membaca file lokal'));
+    });
+  }
+  function clone(v) { return JSON.parse(JSON.stringify(v)); }
+  function metadataProject(p) {
+    const x = clone(p);
+    x.theme = 'lovely';
+    delete x.pin; delete x.quizQuestion; delete x.quizAnswer;
+    delete x.photos; delete x.nextEventTitle; delete x.nextEventDate;
+    delete x.vouchers; delete x.bucketList; delete x.particleEffect;
+    if (typeof x.audioUrl === 'string' && x.audioUrl.startsWith('data:')) x.audioUrl = '';
+    return x;
+  }
+  function readFile(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = () => reject(new Error('File tidak dapat dibaca')); r.readAsDataURL(file); }); }
+  const originalFactory = window.dearyouApp;
+  if (typeof originalFactory !== 'function') return;
+  window.dearyouApp = function () {
+    const app = originalFactory.apply(this, arguments);
+    const originalInit = app.initApp;
+    app._vaultBusy = false;
+    app.initApp = function () {
+      const result = originalInit.apply(this, arguments);
+      const self = this;
+      vaultGet('projects').then((savedProjects) => {
+        if (Array.isArray(savedProjects) && savedProjects.length) {
+          self.projects = savedProjects.map(p => self.normalizeFreeProject(p));
+          const draft = self.activeProject || {};
+          const savedDraft = vaultGet('draft');
+          return savedDraft.then((fullDraft) => {
+            if (fullDraft && (!self.isRecipientView)) self.activeProject = self.normalizeFreeProject(fullDraft);
+            else if (!self.isRecipientView && draft.id) {
+              const matching = savedProjects.find(p => p.id === draft.id || p.slug === draft.slug);
+              if (matching) self.activeProject = self.normalizeFreeProject(matching);
+            }
+          });
+        }
+      }).catch((err) => console.warn('DearYou vault:', err));
+      return result;
+    };
+    app.saveToStorage = function () {
+      try {
+        localStorage.setItem('dearyou_projects_db', JSON.stringify((this.projects || []).map(metadataProject)));
+      } catch (e) { console.warn('Metadata lokal tidak dapat disimpan', e); }
+      const self = this;
+      Promise.all([vaultSet('projects', clone(this.projects || [])), vaultSet('draft', clone(this.activeProject || {}))])
+        .then(() => { self._vaultBusy = false; })
+        .catch((err) => { console.error(err); self.showToast('Penyimpanan lokal gagal.'); });
+    };
+    app.handleAudioFile = async function (event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+      if (!(file.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(file.name))) { this.showToast('Pilih file audio seperti MP3, WAV, OGG, atau M4A.'); return; }
+      if (file.size > 15 * 1024 * 1024) { this.showToast('Ukuran musik maksimal 15 MB.'); return; }
+      try {
+        this.activeProject.audioUrl = await readFile(file);
+        this.activeProject.audioFileName = file.name;
+        this.isAudioPlaying = false;
+        this.saveToStorage();
+        this.showToast('Musik berhasil ditambahkan.');
+      } catch (err) { console.error(err); this.showToast('Musik gagal dibaca.'); }
+    };
+    app.previewLocalAudio = function () {
+      const audio = document.getElementById('bgAudio');
+      if (!audio || !this.activeProject.audioUrl) { this.showToast('Pilih file musik terlebih dahulu.'); return; }
+      audio.src = this.activeProject.audioUrl;
+      audio.play().then(() => { this.isAudioPlaying = true; }).catch(() => this.showToast('Tekan tombol play sekali lagi.'));
+    };
+    app.removeLocalAudio = function () {
+      const audio = document.getElementById('bgAudio');
+      if (audio) { audio.pause(); audio.removeAttribute('src'); audio.load(); }
+      this.activeProject.audioUrl = '';
+      this.activeProject.audioFileName = '';
+      this.isAudioPlaying = false;
+      this.saveToStorage();
+      this.showToast('Musik dihapus.');
+    };
+    const originalToggleAudio = app.toggleAudio;
+    app.toggleAudio = function () {
+      const audio = document.getElementById('bgAudio');
+      if (audio && this.activeProject.audioUrl) {
+        if (this.isAudioPlaying) { audio.pause(); this.isAudioPlaying = false; }
+        else { audio.src = this.activeProject.audioUrl; audio.play().then(() => { this.isAudioPlaying = true; }).catch(() => this.showToast('Tekan tombol musik untuk memulai pemutaran.')); }
+      } else if (typeof originalToggleAudio === 'function') originalToggleAudio.apply(this, arguments);
+      else this.showToast('Tambahkan file musik terlebih dahulu.');
+    };
+
+    // SALIN TAUTAN: pemendek tautan dengan fallback clipboard yang kompatibel
+    app.copyShareLink = async function (proj) {
+      const target = clone(proj || this.activeProject);
+      target.theme = 'lovely';
+      delete target.pin; delete target.quizQuestion; delete target.quizAnswer;
+      delete target.photos; delete target.nextEventTitle; delete target.nextEventDate;
+      delete target.vouchers; delete target.bucketList; delete target.particleEffect;
+      const localAudio = typeof target.audioUrl === 'string' && target.audioUrl.startsWith('data:');
+
+      // Audio lokal dari perangkat tidak bisa ikut dibagikan lewat URL.
+
+      if (localAudio) { target.audioUrl = ''; target.audioFileName = ''; }
+
+      try {
+        const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(target))));
+        let shareUrl = new URL(window.location.href);
+        shareUrl.search = '';
+        shareUrl.hash = '';
+        shareUrl.searchParams.set('data', encodedData);
+        let finalUrl = shareUrl.href;
+
+        this.showToast('Menyiapkan tautan...');
+
+        // Shortener dapat menolak permintaan dari browser (CORS / batas URL).
+        // Coba layanan satu per satu, lalu tetap salin tautan asli jika layanan gagal.
+        const shorteners = [
+          'https://tinyurl.com/api-create.php?url=',
+          'https://is.gd/create.php?format=simple&url='
+        ];
+        for (const endpoint of shorteners) {
+          try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+            const response = await fetch(endpoint + encodeURIComponent(finalUrl), {
+              signal: controller.signal,
+              cache: 'no-store'
+            });
+            clearTimeout(timeout);
+            if (response.ok) {
+              const candidate = (await response.text()).trim();
+              if (/^https?:\/\//i.test(candidate) && candidate.length < finalUrl.length) {
+                finalUrl = candidate;
+                break;
+              }
+            }
+          } catch (_) { /* lanjut ke layanan berikutnya */ }
+        }
+
+        // Clipboard API kadang gagal walau tersedia (izin browser / bukan HTTPS).
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(finalUrl);
+          } else {
+            throw new Error('Clipboard tidak tersedia');
+          }
+        } catch (_) {
+          const field = document.createElement('textarea');
+          field.value = finalUrl;
+          field.setAttribute('readonly', '');
+          field.style.position = 'fixed';
+          field.style.opacity = '0';
+          document.body.appendChild(field);
+          field.select();
+          field.setSelectionRange(0, field.value.length);
+          const copied = document.execCommand('copy');
+          field.remove();
+          if (!copied) {
+            window.prompt('Salin tautan ini:', finalUrl);
+          }
+        }
+
+        this.showToast((finalUrl.length < shareUrl.href.length ? 'Tautan pendek berhasil disalin.' : 'Tautan disalin. Layanan pemendek sedang tidak tersedia, jadi tautan belum dipendekkan.')
+          + (localAudio ? ' Musik dari perangkat tidak ikut dalam tautan.' : ''));
+      } catch (error) {
+        console.error('Gagal menyalin tautan:', error);
+        this.showToast('Gagal menyalin tautan. Coba buka situs melalui HTTPS lalu ulangi.');
+      }
+    };
+
+    return app;
+  };
+})();
+</script>
+
+</body>
+</html>
